@@ -12,7 +12,7 @@ data class ContentDTO(
     var timestamp: Long? = null,
     // know time
     var favoriteCount: Int = 0,
-    var favorites: Map<String, Boolean> = HashMap()
+    var favorites: MutableMap<String, Boolean> = HashMap()
 ) {
 
     data class Comment(
