@@ -14,14 +14,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import org.techtown.lineup.R
+import org.techtown.lineup.navigation.model.AlarmDTO
 import org.techtown.lineup.navigation.model.ContentDTO
 
 class CommentActivity : AppCompatActivity() {
     var contentUid: String? = null
+    var destinationUid : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment)
         contentUid = intent.getStringExtra("contentUid")
+        destinationUid = intent.getStringExtra("destinationUid")
 
         comment_recyclerview.adapter =CommentRecyclerViewAdapter()
         comment_recyclerview.layoutManager=LinearLayoutManager(this)
@@ -36,8 +39,19 @@ class CommentActivity : AppCompatActivity() {
 
             FirebaseFirestore.getInstance().collection("images").document(contentUid!!)
                 .collection("comments").document().set(comment)
+            commentAlarm(destinationUid!!, comment_edit_message.text.toString())
             comment_edit_message.setText("")
         }
+    }
+
+    fun commentAlarm(destinationUid : String, message : String){
+        var alarmDTO = AlarmDTO()
+        alarmDTO.destinationUid = destinationUid
+        alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+        alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+        alarmDTO.timestamp = System.currentTimeMillis()
+        alarmDTO.message = message
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
     }
 
     inner class CommentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
