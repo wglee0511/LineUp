@@ -43,6 +43,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_cotification_icon"
+            android:resource="@drawable/push_icon"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_cotification_color"
+            android:resource="@color/colorAccent"/>
     </application>
 
 </manifest>
